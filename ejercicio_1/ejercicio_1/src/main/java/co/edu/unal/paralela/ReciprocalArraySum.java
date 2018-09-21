@@ -154,7 +154,7 @@ public final class ReciprocalArraySum {
         right.compute();
         left.compute();
         left.join();
-        return left.ans + right.ans;
+        return left.getValue() + right.getValue();
     }
 
     /**
