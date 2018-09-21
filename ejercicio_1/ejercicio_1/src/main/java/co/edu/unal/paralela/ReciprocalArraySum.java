@@ -128,8 +128,9 @@ public final class ReciprocalArraySum {
 
         @Override
         protected void compute() {
+            value = 0.0;
             for (int i = startIndexInclusive ; i < endIndexExclusive; i++) {
-                
+                value + = 1/input[i];
             }
         }
     }
@@ -151,9 +152,9 @@ public final class ReciprocalArraySum {
         ReciprocalArraySumTask right = new ReciprocalArraySumTask(input.length/2,input.length,input);
         left.fork();
         right.compute();
+        left.compute();
         left.join();
-        //return left. + right.ans;
-        return 2.5;
+        return left.ans + right.ans;
     }
 
     /**
@@ -166,13 +167,11 @@ public final class ReciprocalArraySum {
      * @param numTasks El número de tareas para crear
      * @return La suma de los recíprocos del arreglo de entrada
      */
-    protected static double parManyTaskArraySum(final double[] input,
-           final int numTasks) {
+    protected static double parManyTaskArraySum(final double[] input,final int numTasks) {
         double sum = 0;
         List<ReciprocalArraySumTask> tasks = new ArrayList<>(numTasks);
         for (int i = 0; i < numTasks; i++) {
             tasks.add(new ReciprocalArraySumTask(getChunkStartInclusive(i,numTasks,input.length),getChunkEndExclusive(i,numTasks,input.length),input));
-            
         }
         RecursiveAction.invokeAll(tasks);
         for (ReciprocalArraySumTask task:tasks) {
